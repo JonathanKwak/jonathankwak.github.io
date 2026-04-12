@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Roblox Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --text: #0f0f0d;
+    --muted: #7a7870;
+    --accent: #e8431a;
+    --accent-soft: #fdf0ec;
+    --border: #e0ddd6;
+    --mono: 'DM Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--display);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(247, 245, 240, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+  }
+  .hero-left {
+    padding: 6rem 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+  }
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 360px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--text);
+    color: var(--bg);
+    padding: 0.85rem 1.75rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    width: fit-content;
+  }
+  .hero-cta:hover { background: var(--accent); }
+  .hero-cta-arrow { transition: transform 0.2s; }
+  .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+
+  .hero-right {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+  }
+  .hero-stat {
+    padding: 3rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero-stat:last-child { border-bottom: none; }
+  .stat-num {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  /* Sections */
+  section { padding: 6rem 3rem; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* About */
+  #about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 1.0625rem;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+  }
+  .about-text p strong { color: var(--text); font-weight: 600; }
+  .skills-list { list-style: none; }
+  .skill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .skill-item:first-child { border-top: 1px solid var(--border); }
+  .skill-name { color: var(--text); letter-spacing: 0.03em; }
+  .skill-tag {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 10px;
+    padding: 3px 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Projects */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+  }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.07); }
+  .project-card.featured {
+    grid-column: span 2;
+  }
+  .project-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .project-thumb-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--bg) 0px,
+      var(--bg) 10px,
+      var(--border) 10px,
+      var(--border) 11px
+    );
+    transition: opacity 0.3s;
+  }
+  .project-card:hover .project-thumb-inner { opacity: 0.7; }
+  .project-body { padding: 1.25rem 1.5rem 1.5rem; }
+  .project-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .project-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+  .project-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    transition: gap 0.2s;
+  }
+  .project-link:hover { gap: 14px; }
+
+  .slideshow { position: relative; width: 100%; height: 100%; }
+
+  /* Slideshow */
+  .slide-btn {
+    position: absolute; top: 50%; 
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.45); 
+    color: white; border: none;
+    width: 32px; 
+    height: 32px; 
+    font-size: 18px;
+    opacity: 0; 
+    transition: opacity 0.2s;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+  .slideshow:hover .slide-btn { opacity: 1; }
+  .slide-btn.prev { left: 8px; }
+  .slide-btn.next { right: 8px; }
+
+  .slide-dots {
+    position: absolute; 
+    bottom: 8px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    display: flex; 
+    gap: 5px;
+  }
+  .slide-dot {
+    width: 5px; 
+    height: 5px; 
+    border-radius: 50%;
+    background: rgba(255,255,255,0.45); 
+    transition: background 0.2s;
+  }
+  .slide-dot.active { background: white; }
+
+  /* Contact */
+  #contact { background: var(--text); color: var(--bg); }
+  #contact .section-num { color: var(--accent); }
+  #contact .section-title { color: var(--bg); }
+  #contact .section-header { border-color: rgba(255,255,255,0.1); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .contact-note {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+    color: rgba(247,245,240,0.85);
+  }
+  .contact-note em { font-style: normal; color: var(--accent); }
+  .contact-social {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .social-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(247,245,240,0.45);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.2s;
+  }
+  .social-link::before { content: '→'; color: var(--accent); }
+  .social-link:hover { color: rgba(247,245,240,0.9); }
+
+  /* Form */
+  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,245,240,0.4);
+  }
+  .form-input, .form-textarea {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.85rem 1rem;
+    font-family: var(--display);
+    font-size: 15px;
+    color: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(247,245,240,0.2); }
+  .form-textarea { min-height: 130px; }
+  .form-submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+  .form-submit:hover { background: #c93512; transform: translateY(-1px); }
+  .form-submit:active { transform: translateY(0); }
+
+  /* Footer */
+  footer {
+    padding: 1.5rem 3rem;
+    background: var(--text);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(247,245,240,0.25);
+    letter-spacing: 0.06em;
+  }
+
+  /* Fade-in on scroll */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { grid-template-rows: auto auto; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+    .hero-stat { border-right: 1px solid var(--border); border-bottom: none; }
+    .hero-stat:last-child { border-right: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; }
+    section { padding: 4rem 1.5rem; }
+    .hero-left { padding: 4rem 1.5rem 3rem; border-right: none; }
+    .hero-right .hero-stat { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">dev<span>.</span>portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Roblox Developer, Game Dev</div>
+    <h1>Building experiences for the love of the game.</h1>
+    <p class="hero-desc">
+    I'm a solo developer who specializes in Roblox experiences, but also other fields like web development and game design. I'm passionate about 3D animation, 3D modelling, gameplay programming and game systems design. I care most about how the game feels, rather than its bare stats.
+    </p>
+    <a href="#projects" class="hero-cta">
+      View work <span class="hero-cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="stat-num">8+ years</div>
+      <div class="stat-label">of game dev experience</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">130M+</div>
+      <div class="stat-label">Total visits</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">front page games</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About me</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I'm <strong>Jonathan</strong>, a game developer and 3D artist passionate about creating games that feel alive. I've been building on Roblox since <strong>2018</strong>, and I love the process - from thinking of a concept to seeing my creation come to life.
+      </p>
+      <p>
+        My work spans <strong>3D modelling and animation</strong>, Lua scripting, Python, C#, and game systems design. I especially care about the details; whether that's the weight of an animation, the flow of a game loop, or how a world feels to explore.
+      </p>
+      <p>
+        When I'm not building games, I'm playing them. I take every opportunity to learn what makes games fun.
+      </p>
+    </div>
+    <div class="reveal">
+      <ul class="skills-list">
+        <li class="skill-item"><span class="skill-name">Roblox Studio</span><span class="skill-tag">8+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Lua / Luau scripting</span><span class="skill-tag">8+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Blender (3D modelling)</span><span class="skill-tag">6+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Blender (3D animation)</span><span class="skill-tag">5+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Game design and systems</span><span class="skill-tag">7+ years</span></li>
+        <li class="skill-item"><span class="skill-name">UI/UX for games</span><span class="skill-tag">7+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Python</span><span class="skill-tag">2+ years</span></li>
+        <li class="skill-item"><span class="skill-name">C#</span><span class="skill-tag">1+ years</span></li>
+        <li class="skill-item"><span class="skill-name">Java</span><span class="skill-tag">1+ years</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- projects -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Projects</h2>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Featured project -->
+    <div class="project-card featured reveal">
+      <div class="project-thumb">
+        <img src="images/dummies-vs-noobs.png" alt="My game screenshot"
+            style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Featured game - Live on Roblox</div>
+        <div class="project-name">Dummies vs Noobs</div>
+        <p class="project-desc">A wave based shooter game where a team of 8 players fights off a horde of various AI enemies, leveraging upgrades and kit classes.</p>
+        <div class="project-tags">
+          <span class="tag">Roblox</span>
+          <span class="tag">Luau</span>
+          <span class="tag">Game design</span>
+          <span class="tag">Long-term game management</span>
+        </div>
+        <a href="https://www.roblox.com/games/8657806289/Dummies-vs-Noobs" class="project-link">Play on Roblox →</a>
+      </div>
+    </div>
+
+    <!-- Side project -->
+    <div class="project-card reveal">
+      <div class="project-thumb">
+        <img src="images/hellmet.png" alt="My game screenshot"
+            style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Featured game - Live on Roblox</div>
+        <div class="project-name">HELLMET</div>
+        <p class="project-desc">A slower-paced tactical first-person shooter game from the perspective of a helmet camera. Players must work in a team of up to 3 players to complete objectives while choosing carefully who to kill. </p>
+        <div class="project-tags">
+          <span class="tag">Roblox Studio</span>
+          <span class="tag">Luau</span>
+          <span class="tag">Game design</span>
+        </div>
+        <a href="https://www.roblox.com/games/13815196156/HELLMET" class="project-link">Play on Roblox →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb">
+        <img src="images/the-shepherd.png" alt="My game screenshot"
+            style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Side project</div>
+        <div class="project-name">The Shepherd</div>
+        <p class="project-desc">A bleak text-based singleplayer survival game. You are tasked with leading a trail of refugees to nowhere in particular, with the sole purpose of surviving as long as possible. Difficult choices must be made.</p>
+        <div class="project-tags">
+          <span class="tag">Roblox</span>
+          <span class="tag">Luau</span>
+        </div>
+        <a href="https://www.roblox.com/games/130369355009486/The-Shepherd" class="project-link">Play on Roblox →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb">
+        <div class="slideshow" data-index="0">
+          <img src="images/3d modelling screenshots/odm-gear.png" alt="Screenshot 1" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          <img src="images/3d modelling screenshots/swords.png" alt="Screenshot 2" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <img src="images/3d modelling screenshots/rifle.png" alt="Screenshot 3" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <img src="images/3d modelling screenshots/rifle2.png" alt="Screenshot 4" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <button class="slide-btn prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="slide-btn next" onclick="changeSlide(this, 1)">›</button>
+          <div class="slide-dots"></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Showcase</div>
+        <div class="project-name">3D modelling</div>
+        <p class="project-desc">Here are some of my 3D models I've made in recent years.</p>
+        <div class="project-tags">
+          <span class="tag">Blender</span>
+          <span class="tag">3D modelling</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb">
+        <div class="slideshow" data-index="0">
+          <video src="videos/AKS74U.mp4"
+                style="width:100%;height:100%;object-fit:cover;display:block;"
+                muted loop playsinline preload="metadata">
+          </video>
+          <video src="videos/Martini Henry.mp4"
+                style="width:100%;height:100%;object-fit:cover;display:block;"
+                muted loop playsinline preload="metadata">
+          </video>
+          <button class="slide-btn prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="slide-btn next" onclick="changeSlide(this, 1)">›</button>
+          <div class="slide-dots"></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Showcase</div>
+        <div class="project-name">3D animation</div>
+        <p class="project-desc">And here's some 3D animations I've made. Note that I've worked on a lot more animations, usually for personal projects, but I never bothered to record the work.</p>
+        <div class="project-tags">
+          <span class="tag">Blender</span>
+          <span class="tag">3D animation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb">
+        <img src="images/senseis-gun-kit.png" alt="My game screenshot"
+            style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Open Source</div>
+        <div class="project-name">Sensei's Gun Kit</div>
+        <p class="project-desc">A gun kit forked from Dummies vs Noobs, modified to be more customizable and used by the general public.</p>
+        <div class="project-tags">
+          <span class="tag">Roblox Studio</span>
+          <span class="tag">Open Source</span>
+        </div>
+        <a href="https://create.roblox.com/store/asset/9112185857/Senseis-Gun-Kit" class="project-link">Get it on roblox →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Contact</h2>
+  </div>
+  <div class="contact-grid">
+    <div class="reveal">
+      <p class="contact-note">Want to collaborate? Or wanna say hi?</p>
+      <div class="contact-social">
+        <a href="https://www.roblox.com/users/177437519/profile" class="social-link">Roblox profile</a>
+        <a href="https://github.com/JonathanKwak" class="social-link">GitHub</a>
+        <a href="senseirblx1@gmail.com" class="social-link">senseirblx1@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Jonathan Kwak</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Build dots for each slideshow on page load
+  document.querySelectorAll('.slideshow').forEach(ss => {
+    const first = ss.querySelector('img, video');
+    if (first && first.tagName === 'VIDEO') first.play();
+
+    // your existing dots code stays below this...
+    const slides = ss.querySelectorAll('img, video');
+    const dotsEl = ss.querySelector('.slide-dots');
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      dotsEl.appendChild(d);
+    });
+  });
+
+  function changeSlide(btn, dir) {
+    const ss = btn.closest('.slideshow');
+    const slides = ss.querySelectorAll('img, video');
+    const dots = ss.querySelectorAll('.slide-dot');
+    let i = parseInt(ss.dataset.index);
+
+    // hide current slide, pause if it's a video
+    slides[i].style.display = 'none';
+    if (slides[i].tagName === 'VIDEO') slides[i].pause();
+    dots[i].classList.remove('active');
+
+    // show next slide, play if it's a video
+    i = (i + dir + slides.length) % slides.length;
+    slides[i].style.display = 'block';
+    if (slides[i].tagName === 'VIDEO') slides[i].play();
+    dots[i].classList.add('active');
+    ss.dataset.index = i;
+  }
+</script>
+
+</body>
+</html>
